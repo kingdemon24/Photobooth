@@ -25,8 +25,18 @@ class VideoCaptureApp:
         self.video_source = video_source
         self.vid = cv2.VideoCapture(self.video_source)
 
-        video_frame_width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        video_frame_height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        # video_frame_width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        # video_frame_height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+
+        #..........................
+
+        # Get screen dimensions for full screen
+        screen_width = self.window.winfo_screenwidth()
+        screen_height = self.window.winfo_screenheight()
+
+        # Set video frame dimensions to full screen
+        video_frame_width = screen_width
+        video_frame_height = screen_height
         
         self.video_canvas = tk.Canvas(window, width=video_frame_width, height=video_frame_height)
         self.video_canvas.pack()
@@ -105,7 +115,9 @@ class VideoCaptureApp:
                 current_gestures.append(gesture)
                 if gesture in ['Thumbs Up', 'Peace']:
                     valid_gestures += 1
-                self.mp_drawing.draw_landmarks(frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
+
+# Remove landmarks in pics
+                # self.mp_drawing.draw_landmarks(frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
 
         
         # Check for valid shot and start countdown
@@ -452,6 +464,17 @@ class VideoCaptureApp:
         # Place the small images frame at the bottom center
         self.small_images_frame.place(x=x_coordinate, y=canvas_height - 60)
 
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     app = VideoCaptureApp(root, "Video Capture App")
+
+#...........................................
 if __name__ == "__main__":
     root = tk.Tk()
+
+    # Maximize the Tkinter window
+    root.attributes('-fullscreen', True)
+    root.bind('<Escape>', lambda event: root.attributes('-fullscreen', False))
+
     app = VideoCaptureApp(root, "Video Capture App")
+
