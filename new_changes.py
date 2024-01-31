@@ -465,41 +465,6 @@ class VideoCaptureApp:
         # Place the small images frame at the bottom center
         self.small_images_frame.place(x=x_coordinate, y=canvas_height - 60)
 
-# ------------ Multiple cameras -------------
-        # self.camera_selection_var = tk.StringVar()
-        # self.camera_selection_var.set("0")  # Default camera selection
-
-        # # Create a label and dropdown menu for camera selection
-        # self.camera_label = tk.Label(window, text="Select Camera:")
-        # self.camera_label.pack(pady=5)
-
-        # # Assuming up to 4 cameras, you can extend this based on your needs
-        # camera_options = ["Camera 0", "Camera 1", "Camera 2", "Camera 3"]
-        # self.camera_dropdown = tk.OptionMenu(window, self.camera_selection_var, *camera_options)
-        # self.camera_dropdown.pack(pady=5)
-
-        # # Button to apply camera selection
-        # self.apply_camera_button = tk.Button(window, text="Apply Camera", command=self.apply_camera_selection)
-        # self.apply_camera_button.pack(pady=5)
-
-        # def apply_camera_selection(self):
-        # selected_camera = self.camera_selection_var.get()
-        
-        # # Release the current video source
-        # self.vid.release()
-
-        # # Open the selected camera
-        # self.vid = cv2.VideoCapture(int(selected_camera))
-
-        
-
-        # --------------------------
-
-# if __name__ == "__main__":
-#     root = tk.Tk()
-#     app = VideoCaptureApp(root, "Video Capture App")
-
-#...........................................
 if __name__ == "__main__":
     root = tk.Tk()
 
