@@ -376,7 +376,7 @@ class VideoCaptureApp:
 
     def overlay_qr_code(self, cv2_image, qr_code_cv2):
         # Size of the QR code
-        size = 200  # Increased size for better visibility
+        size = 100  # Increased size for better visibility
         qr_code_resized = cv2.resize(qr_code_cv2, (size, size))
         
         # Position for QR code overlay (bottom-right corner)
@@ -389,10 +389,10 @@ class VideoCaptureApp:
         # Position for text
         text = "Scan for the photo"
         font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 0.5  # Increase the font scale
+        font_scale = 0.3  # Increase the font scale
         font_thickness = 1
         text_x = x_offset  
-        text_y = y_offset + size + 20  # 20 pixels below the QR code
+        text_y = y_offset + size + 10  # 20 pixels below the QR code
 
         # # Draw the text
         cv2.putText(cv2_image, text, (text_x, text_y), font, font_scale, (0, 0, 255), font_thickness)
