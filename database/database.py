@@ -50,4 +50,4 @@ def download_images_from_database(table_name, output_folder):
 
     conn.close()
     #to download image
-download_images_from_database("upload_table","photos_download")
+# download_images_from_database("upload_table","photos_download")
