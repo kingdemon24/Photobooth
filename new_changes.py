@@ -4,12 +4,12 @@ from PIL import Image, ImageTk
 import datetime
 import mediapipe as mp
 import random
-from quotes import quotes
+# from quotes import quotes
 import tempfile
 import requests
 import qrcode
 import numpy as np
-
+from database.database import create_table, upload_database
 class VideoCaptureApp:
     def __init__(self, window, window_title, video_source=0):
 
@@ -70,8 +70,10 @@ class VideoCaptureApp:
         self.small_images_frame = tk.Frame(window)
         self.small_images_frame.pack(side=tk.BOTTOM, pady=10)
 
-        small_image_paths = ['lastframe1.png', 'lastframe2.png', 'lastframe3.png','lastframe4.png']
-        self.small_images = [tk.PhotoImage(file=path) for path in small_image_paths]
+        small_image_paths = ['images/lastframe1.png', 'images/lastframe2.png', 'images/lastframe3.png','images/lastframe4.png','images/lastframe5.png','images/lastframe6.png']
+        # self.small_images = [tk.PhotoImage(file=path) for path in small_image_paths]
+        self.small_images = [tk.PhotoImage(file=path).subsample(30, 30) for path in small_image_paths]  # Adjust subsample factors as needed
+
 
         # Create and display the small image canvases
         self.small_image_canvases = []
@@ -255,7 +257,7 @@ class VideoCaptureApp:
         # cv2.rectangle(image, (0, image.shape[0] - bar_height), (image.shape[1], image.shape[0]), (255, 255, 255), -1)
 
 
-        selected_quote = random.choice(quotes)
+        # selected_quote = random.choice(quotes)
 
         # Choose font for text
         font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
@@ -263,20 +265,23 @@ class VideoCaptureApp:
         font_thickness = 3  # Adjust thickness as needed
 
         # Calculate text size
-        text_size, _ = cv2.getTextSize(selected_quote, font, font_scale, font_thickness)
+        # text_size, _ = cv2.getTextSize(selected_quote, font, font_scale, font_thickness)
 
         # Calculate text position for center alignment
-        text_x = (image.shape[1] - text_size[0]) // 2
-        text_y = image.shape[0] - 20  # Position from the bottom
+        # text_x = (image.shape[1] - text_size[0]) // 2
+        # text_y = image.shape[0] - 20  # Position from the bottom
 
         # Draw the text
-        image_with_border = self.overlay_border(image, self.border_image)
+        if self.border_image is not None:
+            image_with_border = self.overlay_border(image, self.border_image)
+        else:
+            image_with_border = image
 
-        cv2.putText(image_with_border, selected_quote, (text_x, text_y), font, font_scale, (0, 0, 0), font_thickness)
+        # cv2.putText(image_with_border, selected_quote, (text_x, text_y), font, font_scale, (0, 0, 0), font_thickness)
 
         self.show_selection_window(image_with_border)
 
-    def overlay_border(self, cv2_image, border_image):
+    def overlay_border(self, cv2_image, border_image ):
         # Extract the alpha channel from the PNG image and normalize to the range [0, 1]
         alpha_channel = border_image[:, :, 3] / 255.0
 
@@ -331,6 +336,8 @@ class VideoCaptureApp:
     def upload_image_and_generate_qr(self, cv2_image):
             # Convert the OpenCV image to bytes
             _, im_buf_arr = cv2.imencode('.jpg', cv2_image)
+            create_table('upload_table')
+            upload_database(im_buf_arr, 'upload_table')
 
             # Save the image to a temporary file
             temp_file = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
@@ -421,7 +428,7 @@ class VideoCaptureApp:
         self.selected_small_image_index = index
 
         # Update the border image with the clicked image
-        clicked_image_path = f'lastframe{index + 1}.png'
+        clicked_image_path = f'images/lastframe{index + 1}.png'
         if index == 4:
             border_image = cv2.imread(clicked_image_path, cv2.IMREAD_UNCHANGED)
             border_image = cv2.resize(border_image, (self.video_canvas.winfo_reqwidth(), self.video_canvas.winfo_reqheight()))
