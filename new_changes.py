@@ -14,7 +14,6 @@ class VideoCaptureApp:
     def __init__(self, window, window_title, video_source=0):
 
         self.border_image = None
-
         self.snapshot_taken = False 
         self.countdown_active = False
         self.last_valid_time = datetime.datetime.now()
@@ -87,11 +86,9 @@ class VideoCaptureApp:
         for canvas in self.small_image_canvases:
             canvas.pack(side=tk.LEFT, padx=10)
 
-        
         self.update()
         self.window.bind('<KeyPress>', self.on_key_press)  # Bind key press event once
         self.window.mainloop()
-
 
     def process_frame(self, frame):
         # Resize frame for further processing
@@ -279,26 +276,20 @@ class VideoCaptureApp:
 
         self.show_selection_window(image_with_border)
 
-
     def overlay_border(self, cv2_image, border_image):
         # Extract the alpha channel from the PNG image and normalize to the range [0, 1]
         alpha_channel = border_image[:, :, 3] / 255.0
 
         # Resize the alpha channel to match the size of the captured frame
         alpha_channel = cv2.resize(alpha_channel, (cv2_image.shape[1], cv2_image.shape[0]))
-
         # Extract the RGB channels from the PNG image
         rgb_channels = border_image[:, :, :3]
-
         # Resize the RGB channels to match the size of the captured frame
         rgb_channels = cv2.resize(rgb_channels, (cv2_image.shape[1], cv2_image.shape[0]))
-
         # Ensure alpha_channel is a 2D array to avoid broadcasting issues
         alpha_channel = alpha_channel[:, :, np.newaxis]
-
         # Combine the captured frame and the PNG image with proper transparency
         combined_image = (1.0 - alpha_channel) * cv2_image + alpha_channel * rgb_channels
-
         return combined_image.astype(np.uint8)
 
   
@@ -336,9 +327,6 @@ class VideoCaptureApp:
 
         # Update the label in the selection frame
         self.selection_label = label
-
-
-
 
     def upload_image_and_generate_qr(self, cv2_image):
             # Convert the OpenCV image to bytes
@@ -392,14 +380,14 @@ class VideoCaptureApp:
         cv2_image[y_offset:y_offset + size, x_offset:x_offset + size] = qr_code_resized
 
         # Position for text
-        text = "Scan to get Photo"
+        text = "Scan for the photo"
         font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 4.0  # Increase the font scale
-        font_thickness = 2
+        font_scale = 0.5  # Increase the font scale
+        font_thickness = 1
         text_x = x_offset  
         text_y = y_offset + size + 20  # 20 pixels below the QR code
 
-        # Draw the text
+        # # Draw the text
         cv2.putText(cv2_image, text, (text_x, text_y), font, font_scale, (0, 0, 255), font_thickness)
 
         return cv2_image
@@ -434,7 +422,6 @@ class VideoCaptureApp:
 
         # Update the border image with the clicked image
         clicked_image_path = f'lastframe{index + 1}.png'
-        
         if index == 4:
             border_image = cv2.imread(clicked_image_path, cv2.IMREAD_UNCHANGED)
             border_image = cv2.resize(border_image, (self.video_canvas.winfo_reqwidth(), self.video_canvas.winfo_reqheight()))
