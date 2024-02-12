@@ -91,7 +91,9 @@ class WebcamApp:
             return
 
         bg = cv2.resize(bg, (640, 480))  # Resize background to match canvas size
-        bg = cv2.cvtColor(bg, cv2.COLOR_BGR2RGBA)
+
+        # Increase brightness of the background image by 50%
+        bg = cv2.convertScaleAbs(bg, alpha=1.5, beta=0)
 
         # Load the captured image from file (output.png)
         captured_image_path = "output.png"
@@ -99,6 +101,9 @@ class WebcamApp:
         if captured_image is None:
             messagebox.showerror("Error", f"Failed to load {captured_image_path}.")
             return
+
+        # Increase brightness of the captured image by 50%
+        captured_image = cv2.convertScaleAbs(captured_image, alpha=1.5, beta=0)
 
         # Resize the captured image to fit within the background
         captured_image_resized = cv2.resize(captured_image, (bg.shape[1], bg.shape[0]))
@@ -111,7 +116,7 @@ class WebcamApp:
         y_offset = (bg.shape[0] - captured_image_resized.shape[0]) // 2
 
         # Overlay the captured image on top of the background with reduced transparency
-        overlay_alpha = 0.5  # Adjust this value to change the transparency level
+        overlay_alpha = 0.8  # Adjust this value to change the transparency level
         bg[y_offset:y_offset+captured_image_resized.shape[0], x_offset:x_offset+captured_image_resized.shape[1]] = cv2.addWeighted(
             captured_image_with_alpha, overlay_alpha, bg[y_offset:y_offset+captured_image_resized.shape[0], x_offset:x_offset+captured_image_resized.shape[1]], 1 - overlay_alpha, 0)
 

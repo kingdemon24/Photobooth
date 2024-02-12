@@ -110,8 +110,8 @@ class WebcamApp:
         x_offset = (bg.shape[1] - captured_image_resized.shape[1]) // 2
         y_offset = (bg.shape[0] - captured_image_resized.shape[0]) // 2
 
-        # Overlay the captured image on top of the background with reduced transparency
-        overlay_alpha = 0.5  # Adjust this value to change the transparency level
+        # Overlay the captured image on top of the background with adjusted transparency
+        overlay_alpha = 0.8  # Adjust this value to change the transparency level
         bg[y_offset:y_offset+captured_image_resized.shape[0], x_offset:x_offset+captured_image_resized.shape[1]] = cv2.addWeighted(
             captured_image_with_alpha, overlay_alpha, bg[y_offset:y_offset+captured_image_resized.shape[0], x_offset:x_offset+captured_image_resized.shape[1]], 1 - overlay_alpha, 0)
 
